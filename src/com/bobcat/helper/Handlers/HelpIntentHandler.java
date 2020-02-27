@@ -1,5 +1,4 @@
 package com.bobcat.helper.Handlers;
-
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.Response;
@@ -7,37 +6,43 @@ import com.amazon.ask.model.interfaces.display.Template;
 import com.bobcat.helper.Util.CreateTemplateForDevice;
 
 import java.util.Optional;
+
 import static com.amazon.ask.request.Predicates.*;
 
-public class FallBackHandler implements RequestHandler {
+public class HelpIntentHandler implements RequestHandler {
+
     @Override
     public boolean canHandle(HandlerInput handlerInput) {
-        return  handlerInput.matches(intentName("AMAZON.FallbackIntent"));
+        return  handlerInput.matches(intentName("AMAZON.HelpIntent"));
     }
 
     @Override
     public Optional<Response> handle(HandlerInput handlerInput) {
-        String speechText = "Bobcat Helper can't help with that. Please say help to read all of the available command ";
-        String title = "Bobcat Helper";
+        String titile = "Bobcat Helper";
+        String primaryText = "This is all the available command for Bobcat Helper: ";
+        String secondaryText = "1. Show me how to change engine oil.";
+        String speechText = primaryText + secondaryText;
+        secondaryText = "<br/>" + secondaryText;
         String imageURL = "https://bobcat-helper-project.s3.amazonaws.com/1.png";
 
-        Template template = new CreateTemplateForDevice().templateTitle("Bobcat Helper can't help with that","Please say help" +
-                "to hear all the available command.",imageURL);
+
+        Template template = new CreateTemplateForDevice().templateTitle(primaryText,secondaryText,imageURL);
 
         if (null != handlerInput.getRequestEnvelope().getContext().getDisplay()){
-            return handlerInput.getResponseBuilder()
+            handlerInput.getResponseBuilder()
                     .addRenderTemplateDirective(template)
-                    .withSimpleCard(title,speechText)
                     .withSpeech(speechText)
+                    .withSimpleCard(titile,speechText)
                     .withReprompt(speechText)
                     .build();
         }
         else{
-            return handlerInput.getResponseBuilder()
-                    .withSimpleCard(title,speechText)
+            handlerInput.getResponseBuilder()
                     .withSpeech(speechText)
+                    .withSimpleCard(titile,speechText)
                     .withReprompt(speechText)
                     .build();
         }
+        return Optional.empty();
     }
 }
