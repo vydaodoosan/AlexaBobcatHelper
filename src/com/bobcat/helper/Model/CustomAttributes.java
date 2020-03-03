@@ -4,4 +4,5 @@ public final class CustomAttributes {
 
     public static final String COUNTER = "counter";
     public static final String MACHINENAME = "machine";
+    public static final String STAGE = "stage";
 }

@@ -6,7 +6,7 @@ import com.amazon.ask.model.Response;
 import com.bobcat.helper.Model.CustomAttributes;
 import com.bobcat.helper.Util.InstructionGenerator;
 
-import static com.amazon.ask.request.Predicates.*;
+import static com.amazon.ask.request.Predicates.intentName;
 
 import java.util.Map;
 import java.util.Optional;

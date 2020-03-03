@@ -24,6 +24,18 @@ public class CreateTemplateForDevice {
     }
 
     /**
+     * Helper method to create a template 1 for the some request
+     * @param
+     */
+    public Template template1(String titile,String primaryText, String secondaryText, String imgUrl){
+        return BodyTemplate1.builder()
+                .withBackgroundImage(getImage(imgUrl))
+                .withTextContent(getTextContent(primaryText,secondaryText))
+                .withTitle(titile)
+                .build();
+    }
+
+    /**
      * Helper method to create the a body template for the other intent request
      * @param  primaryText
      * @param  secondaryText

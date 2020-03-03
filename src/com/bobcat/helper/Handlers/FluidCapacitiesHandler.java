@@ -3,18 +3,19 @@ package com.bobcat.helper.Handlers;
 import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.dispatcher.request.handler.RequestHandler;
 import com.amazon.ask.model.*;
+import com.amazonaws.services.dynamodbv2.xspec.NULL;
 import com.bobcat.helper.Model.CustomAttributes;
 import com.bobcat.helper.Util.InstructionGenerator;
-
-import static com.amazon.ask.request.Predicates.intentName;
 
 import java.util.Map;
 import java.util.Optional;
 
-public class OilChangeRequestHandler implements RequestHandler {
+import static com.amazon.ask.request.Predicates.intentName;
+
+public class FluidCapacitiesHandler implements RequestHandler {
     @Override
     public boolean canHandle(HandlerInput handlerInput) {
-        return handlerInput.matches(intentName("FindMachineIntent"));
+        return handlerInput.matches(intentName("FluidCapacitiesIntent"));
     }
 
     @Override
@@ -24,18 +25,15 @@ public class OilChangeRequestHandler implements RequestHandler {
         Intent intent = intentRequest.getIntent();
         Map<String, Slot> slots = intent.getSlots();
         String speechText;
-        //Get User Input Machine
         Slot machineName = slots.get("bobcatMachines");
-        if(machineName != null && machineName.getResolutions() != null && machineName.getResolutions().toString().contains("ER_SUCCESS_MATCH"))
-        {
-            String tmpStringMachine = machineName.getValue();
-            Map<String, Object> instructionSessionAttributes = handlerInput.getAttributesManager().getSessionAttributes();
-            instructionSessionAttributes.put(CustomAttributes.MACHINENAME,tmpStringMachine);
-            instructionSessionAttributes.put(CustomAttributes.STAGE,"oil_instruction");
-            instructionSessionAttributes.put(CustomAttributes.COUNTER,0);
+        if(machineName != null && machineName.getResolutions() != null && machineName.getResolutions().toString().contains("ER_SUCCESS_MATCH")) {
+            String tmpMachineName = machineName.getValue();
+            Map<String,Object> instructionSessionAttributes = handlerInput.getAttributesManager().getSessionAttributes();
+            instructionSessionAttributes.put(CustomAttributes.STAGE,"fluid_capacities");
+            instructionSessionAttributes.put(CustomAttributes.MACHINENAME,tmpMachineName);
             return new InstructionGenerator().generateQuestion(handlerInput);
         }
-        else{
+        else {
             String tmpStringMachine = machineName.getValue();
             speechText = "You called " + tmpStringMachine + " and it's not in the list of your machine. Please say the command again with a different machine.";
             return handlerInput.getResponseBuilder()

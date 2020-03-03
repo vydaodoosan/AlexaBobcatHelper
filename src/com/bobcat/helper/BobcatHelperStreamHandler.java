@@ -16,6 +16,10 @@ public class BobcatHelperStreamHandler extends SkillStreamHandler {
                         new PreviousIntentHandler(),
                         new FallBackHandler(),
                         new CancelIntentHandler(),
+                        new ServiceScheduleHandler(),
+                        new StopIntentHandler(),
+                        new VideoPlayingIntentHandler(),
+                        new FluidCapacitiesHandler(),
                         new HelpIntentHandler()
                 )
                 .withSkillId("amzn1.ask.skill.5c72b21c-31e2-489c-acf7-cd1bccfa7f14")

@@ -7,7 +7,8 @@ import com.bobcat.helper.Util.CreateTemplateForDevice;
 
 import java.util.Optional;
 
-import static com.amazon.ask.request.Predicates.*;
+import static com.amazon.ask.request.Predicates.intentName;
+
 
 public class HelpIntentHandler implements RequestHandler {
 
@@ -20,16 +21,16 @@ public class HelpIntentHandler implements RequestHandler {
     public Optional<Response> handle(HandlerInput handlerInput) {
         String titile = "Bobcat Helper";
         String primaryText = "This is all the available command for Bobcat Helper: ";
-        String secondaryText = "1. Show me how to change engine oil.";
+        String secondaryText = "1. Show me the instruction on how to change engine oil. 2. Show me the video on how to change engine oil. 3. Show me how to maintain my bobcat machines";
         String speechText = primaryText + secondaryText;
-        secondaryText = "<br/>" + secondaryText;
-        String imageURL = "https://bobcat-helper-project.s3.amazonaws.com/1.png";
+        secondaryText = "1. Show me the instruction on how to change engine oil. <br/>2. Show me the video on how to change engine oil. <br/>3. Show me how to maintain my bobcat machines";
+        String imageURL = "https://bobcat-helper-project.s3.amazonaws.com/DoosanBobcat.png";
 
 
         Template template = new CreateTemplateForDevice().templateTitle(primaryText,secondaryText,imageURL);
 
         if (null != handlerInput.getRequestEnvelope().getContext().getDisplay()){
-            handlerInput.getResponseBuilder()
+            return handlerInput.getResponseBuilder()
                     .addRenderTemplateDirective(template)
                     .withSpeech(speechText)
                     .withSimpleCard(titile,speechText)
@@ -37,12 +38,11 @@ public class HelpIntentHandler implements RequestHandler {
                     .build();
         }
         else{
-            handlerInput.getResponseBuilder()
+            return handlerInput.getResponseBuilder()
                     .withSpeech(speechText)
                     .withSimpleCard(titile,speechText)
                     .withReprompt(speechText)
                     .build();
         }
-        return Optional.empty();
     }
 }

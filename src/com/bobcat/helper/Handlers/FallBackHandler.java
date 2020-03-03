@@ -7,7 +7,8 @@ import com.amazon.ask.model.interfaces.display.Template;
 import com.bobcat.helper.Util.CreateTemplateForDevice;
 
 import java.util.Optional;
-import static com.amazon.ask.request.Predicates.*;
+import static com.amazon.ask.request.Predicates.intentName;
+
 
 public class FallBackHandler implements RequestHandler {
     @Override
@@ -17,12 +18,12 @@ public class FallBackHandler implements RequestHandler {
 
     @Override
     public Optional<Response> handle(HandlerInput handlerInput) {
-        String speechText = "Bobcat Helper can't help with that. Please say help to read all of the available command ";
+        String speechText = "Bobcat Helper can't help with that. Please say help to read all of the available commands.";
         String title = "Bobcat Helper";
-        String imageURL = "https://bobcat-helper-project.s3.amazonaws.com/1.png";
+        String imageURL = "https://bobcat-helper-project.s3.amazonaws.com/DoosanBobcat.png";
 
         Template template = new CreateTemplateForDevice().templateTitle("Bobcat Helper can't help with that","Please say help" +
-                "to hear all the available command.",imageURL);
+                " to read all the available commands.",imageURL);
 
         if (null != handlerInput.getRequestEnvelope().getContext().getDisplay()){
             return handlerInput.getResponseBuilder()
