@@ -26,9 +26,10 @@ public class OilChangeRequestHandler implements RequestHandler {
         String speechText;
         //Get User Input Machine
         Slot machineName = slots.get("bobcatMachines");
-        if(machineName != null && machineName.getResolutions() != null && machineName.getResolutions().toString().contains("ER_SUCCESS_MATCH"))
+        if(machineName != null && machineName.getResolutions().toString().contains("ER_SUCCESS_MATCH"))
         {
-            String tmpStringMachine = machineName.getValue();
+            String tmpStringMachine = machineName.getValue().toLowerCase();
+            tmpStringMachine = tmpStringMachine.replaceAll("\\s+", "");
             Map<String, Object> instructionSessionAttributes = handlerInput.getAttributesManager().getSessionAttributes();
             instructionSessionAttributes.put(CustomAttributes.MACHINENAME,tmpStringMachine);
             instructionSessionAttributes.put(CustomAttributes.STAGE,"oil_instruction");
@@ -41,6 +42,7 @@ public class OilChangeRequestHandler implements RequestHandler {
             return handlerInput.getResponseBuilder()
                     .withSpeech(speechText)
                     .withReprompt(speechText)
+                    .withSimpleCard("Bobcat Helper",speechText)
                     .withShouldEndSession(false)
                     .build();
         }

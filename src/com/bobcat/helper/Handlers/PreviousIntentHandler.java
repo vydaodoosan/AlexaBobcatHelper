@@ -21,9 +21,13 @@ public class PreviousIntentHandler implements RequestHandler {
     public Optional<Response> handle(HandlerInput handlerInput) {
         Map<String, Object> instructionSessionAttributes = handlerInput.getAttributesManager().getSessionAttributes();
         int currentCounter = (int) instructionSessionAttributes.get(CustomAttributes.COUNTER);
+        String stageOption = (String) instructionSessionAttributes.get(CustomAttributes.STAGE);
         if ((currentCounter-1) >0){
             instructionSessionAttributes.put(CustomAttributes.COUNTER,currentCounter-1);
             return new InstructionGenerator().generateQuestion(handlerInput);
+        }
+        else if (stageOption.equals("fluid_capacities")){
+            return new FluidCapacitiesHandler().init(handlerInput);
         }
         else{
             instructionSessionAttributes.put(CustomAttributes.COUNTER,0);

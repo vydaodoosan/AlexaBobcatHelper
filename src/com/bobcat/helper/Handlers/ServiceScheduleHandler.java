@@ -21,6 +21,7 @@ public class ServiceScheduleHandler implements RequestHandler {
         Map<String, Object> instructionSessionAttributes = handlerInput.getAttributesManager().getSessionAttributes();
         instructionSessionAttributes.put(CustomAttributes.COUNTER,0);
         instructionSessionAttributes.put(CustomAttributes.STAGE,"service_schedule");
+        instructionSessionAttributes.put(CustomAttributes.MACHINENAME,"s630");
         return new InstructionGenerator().generateQuestion(handlerInput);
     }
 }

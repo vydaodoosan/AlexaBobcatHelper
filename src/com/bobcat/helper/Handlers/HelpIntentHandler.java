@@ -21,9 +21,9 @@ public class HelpIntentHandler implements RequestHandler {
     public Optional<Response> handle(HandlerInput handlerInput) {
         String titile = "Bobcat Helper";
         String primaryText = "This is all the available command for Bobcat Helper: ";
-        String secondaryText = "1. Show me the instruction on how to change engine oil. 2. Show me the video on how to change engine oil. 3. Show me how to maintain my bobcat machines";
+        String secondaryText = "1. Show me the instruction on how to change engine oil. 2. Show me the video on how to change engine oil. 3. Show me how to maintain my bobcat machines. 4. Show me the fluid capacities";
         String speechText = primaryText + secondaryText;
-        secondaryText = "1. Show me the instruction on how to change engine oil. <br/>2. Show me the video on how to change engine oil. <br/>3. Show me how to maintain my bobcat machines";
+        secondaryText = "1. Show me the instruction on how to change engine oil. <br/>2. Show me the video on how to change engine oil. <br/>3. Show me how to maintain my bobcat machines. <br/>4. Show me the fluid capacities";
         String imageURL = "https://bobcat-helper-project.s3.amazonaws.com/DoosanBobcat.png";
 
 

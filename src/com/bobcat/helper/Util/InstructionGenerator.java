@@ -4,6 +4,7 @@ import com.amazon.ask.dispatcher.request.handler.HandlerInput;
 import com.amazon.ask.model.Response;
 import com.amazon.ask.model.interfaces.display.Template;
 
+import com.bobcat.helper.Handlers.FallBackHandler;
 import com.bobcat.helper.Model.CustomAttributes;
 
 import java.util.Map;
@@ -14,16 +15,15 @@ public class InstructionGenerator {
     private String title,primaryText,secondaryText,speechText,imageURL,bgImageURL;
 
     public Optional<Response> generateQuestion(HandlerInput handlerInput) {
+
         Map<String, Object> instructionSessionAttributes = handlerInput.getAttributesManager().getSessionAttributes();
         int currentCounter = (int) instructionSessionAttributes.get(CustomAttributes.COUNTER);
         String stageOption = (String) instructionSessionAttributes.get(CustomAttributes.STAGE);
         String machineName = (String) instructionSessionAttributes.get(CustomAttributes.MACHINENAME);
 
-        /**
-         * Oil Instruction Testing
-         */
-        if  (stageOption.equals("oil_instruction")) {
-            if (machineName.equals("s630")) {
+
+        if (stageOption.equals("oil_instruction")) {
+            if (machineName.equals("630") || machineName.equals("s630") || machineName.equals("s. six thirty") || machineName.equals("s. six hundred thirty")) {
                 title = "S630's Engine Oil Change Instruction";
                 bgImageURL = "https://bobcat-helper-project.s3.amazonaws.com/DoosanBobcat.png";
                 //Generate Question step by step
@@ -105,176 +105,122 @@ public class InstructionGenerator {
                 }
             }
         }
-
-        /**
-         * Service Schedule
-         */
-
-        if (stageOption.equals("service_schedule")){
+        else if (stageOption.equals("service_schedule")) {
             title = "Maintenance Intervals";
             bgImageURL = "https://bobcat-helper-project.s3.amazonaws.com/DoosanBobcat.png";
-            if (currentCounter == 0){
+            if (currentCounter == 0) {
                 primaryText = "Maintenance work must be done at regular intervals";
-                secondaryText = "Failure to do so will result in excessive wear and early failures. The service schedule is a guide for correct maintenance of the Bobcat loader." ;
+                secondaryText = "Failure to do so will result in excessive wear and early failures. The service schedule is a guide for correct maintenance of the Bobcat loader.";
                 speechText = primaryText + ". " + secondaryText;
                 bgImageURL = "https://bobcat-helper-project.s3.amazonaws.com/DoosanBobcat.png";
                 imageURL = "https://bobcat-helper-project.s3.amazonaws.com/pic8.png";
-            }
-            else if (currentCounter == 1){
-                String [] content = {"Engine Oil: Check level and add as needed.","Engine Air Filters and Air System: Check display panel. Service only when required. Check for leaks and damaged components."
-                        ,"Engine Cooling System: Clean debris from hydraulic fluid cooler and radiator assembly, fuel cooler, air conditioning condenser (if equipped), and rear grille. Check coolant level COLD and add premixed coolant as needed."
-                        ,"Fuel Filter: Check the display panel. Remove the trapped water when required."
-                        ,"Lift Arms, Lift Links, Cylinders, Bob-Tach, Pivot Pins, Wedges: Lubricate with multipurpose lithium based grease.",
+            } else if (currentCounter == 1) {
+                String[] content = {"Engine Oil: Check level and add as needed.", "Engine Air Filters and Air System: Check display panel. Service only when required. Check for leaks and damaged components."
+                        , "Engine Cooling System: Clean debris from hydraulic fluid cooler and radiator assembly, fuel cooler, air conditioning condenser (if equipped), and rear grille. Check coolant level COLD and add premixed coolant as needed."
+                        , "Fuel Filter: Check the display panel. Remove the trapped water when required."
+                        , "Lift Arms, Lift Links, Cylinders, Bob-Tach, Pivot Pins, Wedges: Lubricate with multipurpose lithium based grease.",
                         "Seat Belt, Seat Belt Retractors, Seat Bar, Control Interlocks: Check the condition of seat belt. Clean or replace seat belt retractors as needed. Check the seat bar and control interlocks for correct operation. Clean dirt and debris from moving parts."
-                        ,"Bobcat Interlock Control Systems (BICS): Check for correct function. Lift and Tilt functions MUST NOT operate with seat bar raised."
-                        ,"Front Horn / Back-up Alarm: Check for proper function."
-                        ,"Tires: Check for damaged tires and correct air pressure. Inflate to MAXIMUM pressure shown on the sidewall of the tire."
-                        ,"Operator Cab: Check the fastening bolts, washers, and nuts. Check the condition of the cab."
-                        ,"Indicators and Lights: Check for correct operation of all indicators and lights.","Wheel Nuts Perform every 10 hours or daily for the first 30 hours, then as scheduled. Check for loose wheel nuts and tighten to correct torque."
-                        ,"Safety Signs and Safety Treads: Check for damaged signs (decals) and safety treads. Replace any signs or safety treads that are damaged or worn."
-                        ,"Hydraulic Fluid: Check fluid level and add as needed.","Heater and Air Conditioning Filters (if equipped). Clean or replace filters as needed."};
+                        , "Bobcat Interlock Control Systems (BICS): Check for correct function. Lift and Tilt functions MUST NOT operate with seat bar raised."
+                        , "Front Horn / Back-up Alarm: Check for proper function."
+                        , "Tires: Check for damaged tires and correct air pressure. Inflate to MAXIMUM pressure shown on the sidewall of the tire."
+                        , "Operator Cab: Check the fastening bolts, washers, and nuts. Check the condition of the cab."
+                        , "Indicators and Lights: Check for correct operation of all indicators and lights.", "Wheel Nuts Perform every 10 hours or daily for the first 30 hours, then as scheduled. Check for loose wheel nuts and tighten to correct torque."
+                        , "Safety Signs and Safety Treads: Check for damaged signs (decals) and safety treads. Replace any signs or safety treads that are damaged or worn."
+                        , "Hydraulic Fluid: Check fluid level and add as needed.", "Heater and Air Conditioning Filters (if equipped). Clean or replace filters as needed."};
                 primaryText = "Every 10 Hours (Before Starting The Loader)";
-                for (String text : content)
-                {
+                for (String text : content) {
                     secondaryText = secondaryText + "For " + text + " ";
                 }
                 speechText = primaryText + ". " + secondaryText;
                 secondaryText = "";
-                for (String text : content)
-                {
-                    secondaryText = secondaryText + "<br/>" + "For " +  text + " ";
+                for (String text : content) {
+                    secondaryText = secondaryText + "<br/>" + "For " + text + " ";
                 }
                 secondaryText = "<font size='2'>" + secondaryText + "</font>";
                 primaryText = "<b>" + primaryText + "</b>";
-            }
-            else if (currentCounter == 2){
-                String [] content = {"Hydraulic Hoses and Tubelines: Check for damage and leaks. Repair or replace as needed."
-                        ,"Final Drive Transmission (Chaincase): Check fluid level and add as needed."
-                        ,"Parking Brake, Foot Pedals, Hand Controls and Steering Levers, or Joysticks: Check for correct operation. Repair or adjust as needed."
-                        ,"Wheel Nuts: Check for loose wheel nuts and tighten to correct torque."
-                        ,"Engine / Hydrostatic Drive Belt: Perform at first 50 hours, then as scheduled. Check for wear or damage. Adjust or replace as needed."
-                        ,"Engine Oil and Filter: Perform at first 50 hours, then as scheduled. Replace oil and filter."};
+            } else if (currentCounter == 2) {
+                String[] content = {"Hydraulic Hoses and Tubelines: Check for damage and leaks. Repair or replace as needed."
+                        , "Final Drive Transmission (Chaincase): Check fluid level and add as needed."
+                        , "Parking Brake, Foot Pedals, Hand Controls and Steering Levers, or Joysticks: Check for correct operation. Repair or adjust as needed."
+                        , "Wheel Nuts: Check for loose wheel nuts and tighten to correct torque."
+                        , "Engine / Hydrostatic Drive Belt: Perform at first 50 hours, then as scheduled. Check for wear or damage. Adjust or replace as needed."
+                        , "Engine Oil and Filter: Perform at first 50 hours, then as scheduled. Replace oil and filter."};
                 primaryText = "Every 50 Hours";
-                for (String text : content)
-                {
+                for (String text : content) {
                     secondaryText = secondaryText + "For " + text + " ";
                 }
                 speechText = primaryText + ". " + secondaryText;
                 secondaryText = "";
-                for (String text : content)
-                {
-                    secondaryText = secondaryText + "<br/>" + "For " +  text + " ";
+                for (String text : content) {
+                    secondaryText = secondaryText + "<br/>" + "For " + text + " ";
                 }
                 secondaryText = "<font size='2'>" + secondaryText + "</font>";
                 primaryText = "<b>" + primaryText + "</b>";
-            }
-            else if (currentCounter == 3){
-                String [] content = {"Battery: Check cables and connections."
-                ,"Engine Oil and Filter: Perform every 100 hours when operating under severe conditions. Replace oil and filter."};
+            } else if (currentCounter == 3) {
+                String[] content = {"Battery: Check cables and connections."
+                        , "Engine Oil and Filter: Perform every 100 hours when operating under severe conditions. Replace oil and filter."};
                 primaryText = "Every 100 Hours";
-                for (String text : content)
-                {
+                for (String text : content) {
                     secondaryText = secondaryText + "For " + text + " ";
                 }
                 speechText = primaryText + ". " + secondaryText;
                 secondaryText = "";
-                for (String text : content)
-                {
-                    secondaryText = secondaryText + "<br/>" + "For " +  text + " ";
+                for (String text : content) {
+                    secondaryText = secondaryText + "<br/>" + "For " + text + " ";
                 }
                 secondaryText = "<font size='2'>" + secondaryText + "</font>";
                 primaryText = "<b>" + primaryText + "</b>";
-            }
-            else if (currentCounter == 4){
-                String [] content = {"Engine / Hydrostatic Drive Belt: Check for wear or damage. Adjust or replace as needed."
-                ,"Drive Belts (Alternator, air conditioning, water pump): Check condition. Replace as needed."
-                ,"Bobcat Interlock Control System (BICS): Check the function of the lift arm bypass control."
-                ,"Every 500 Hours or Every 12 Months, for Fuel Filter: Replace filter element."
-                ,"Hydraulic Charge Filter, Hydraulic Reservoir Breather Cap: Replace the charge filter and the reservoir breather cap."
-                ,"Engine Oil and Filter: Replace oil and filter."
-                ,"Heater Coil and Air Conditioning Evaporator (if equipped): Clean the heater coil and air conditioning evaporator."};
+            } else if (currentCounter == 4) {
+                String[] content = {"Engine / Hydrostatic Drive Belt: Check for wear or damage. Adjust or replace as needed."
+                        , "Drive Belts (Alternator, air conditioning, water pump): Check condition. Replace as needed."
+                        , "Bobcat Interlock Control System (BICS): Check the function of the lift arm bypass control."
+                        , "Every 500 Hours or Every 12 Months, for Fuel Filter: Replace filter element."
+                        , "Hydraulic Charge Filter, Hydraulic Reservoir Breather Cap: Replace the charge filter and the reservoir breather cap."
+                        , "Engine Oil and Filter: Replace oil and filter."
+                        , "Heater Coil and Air Conditioning Evaporator (if equipped): Clean the heater coil and air conditioning evaporator."};
                 primaryText = "Every 250 Hours or Every 12 Months";
-                for (String text : content)
-                {
+                for (String text : content) {
                     secondaryText = secondaryText + "For " + text + " ";
                 }
                 speechText = primaryText + ". " + secondaryText;
                 secondaryText = "";
-                for (String text : content)
-                {
-                    secondaryText = secondaryText + "<br/>" + "For " +  text + " ";
+                for (String text : content) {
+                    secondaryText = secondaryText + "<br/>" + "For " + text + " ";
                 }
                 secondaryText = "<font size='2'>" + secondaryText + "</font>";
                 primaryText = "<b>" + primaryText + "</b>";
-            }
-            else if (currentCounter == 5){
-                String [] content = {"Hydraulic / Hydrostatic Filter: Replace the hydraulic / hydrostatic filter."
-                ,"Hydraulic Reservoir: Replace the fluid."
-                ,"Final Drive Transmission (Chaincase): Replace the fluid."
-                ,"Engine Valves: Adjust the engine valve clearance."};
+            } else if (currentCounter == 5) {
+                String[] content = {"Hydraulic / Hydrostatic Filter: Replace the hydraulic / hydrostatic filter."
+                        , "Hydraulic Reservoir: Replace the fluid."
+                        , "Final Drive Transmission (Chaincase): Replace the fluid."
+                        , "Engine Valves: Adjust the engine valve clearance."};
                 primaryText = "Every 1000 Hours or Every 12 Months";
-                for (String text : content)
-                {
+                for (String text : content) {
                     secondaryText = secondaryText + "For " + text + " ";
                 }
                 speechText = primaryText + ". " + secondaryText;
                 secondaryText = "";
-                for (String text : content)
-                {
-                    secondaryText = secondaryText + "<br/>" + "For " +  text + " ";
+                for (String text : content) {
+                    secondaryText = secondaryText + "<br/>" + "For " + text + " ";
                 }
                 secondaryText = "<font size='2'>" + secondaryText + "</font>";
                 primaryText = "<b>" + primaryText + "</b>";
-            }
-
-            else if (currentCounter == 6){
-                String [] content = {"Coolant: Replace the coolant."};
+            } else if (currentCounter == 6) {
+                String[] content = {"Coolant: Replace the coolant."};
                 primaryText = "Every 1500 Hours or Every 24 Months";
-                for (String text : content)
-                {
+                for (String text : content) {
                     secondaryText = secondaryText + "For " + text + " ";
                 }
                 speechText = primaryText + ". " + secondaryText;
                 secondaryText = "";
-                for (String text : content)
-                {
-                    secondaryText = secondaryText + "<br/>" + "For " +  text + " ";
+                for (String text : content) {
+                    secondaryText = secondaryText + "<br/>" + "For " + text + " ";
                 }
                 secondaryText = "<font size='2'>" + secondaryText + "</font>";
                 primaryText = "<b>" + primaryText + "</b>";
             }
         }
 
-        if (stageOption.equals("fluid_capacities")){
-            if (machineName.equals("s630") ){
-                String [] content = {"Fuel 90,5 L (23.9 U.S. gal)"
-                        ,"Engine Oil with Filter Change 8,6 L (9.1 qt)"
-                        ,"Engine Cooling System with Heater 11,8 L (3.1 U.S. gal)"
-                        ,"Engine Cooling System without Heater 11,4 L (3.0 U.S. gal)"
-                        ,"Hydraulic / Hydrostatic Reservoir 10,2 L (2.7 U.S. gal)"
-                        ,"Hydraulic / Hydrostatic System 41,6 L (11.0 U.S. gal)"
-                        ,"Chaincase Reservoir 39,2 L (10.35 U.S. gal)"
-                        ,"Air Conditioning Refrigerant (R-134a) 0,9 kg (2.0 lb)"};
-                primaryText = "Capacities";
-                for (String text : content)
-                {
-                    secondaryText = secondaryText + "For " + text + " ";
-                }
-                speechText = primaryText + ". " + secondaryText;
-                secondaryText = "";
-                for (String text : content)
-                {
-                    secondaryText = secondaryText + "<br/>" + "For " +  text + " ";
-                }
-                secondaryText = "<font size='2'>" + secondaryText + "</font>";
-                primaryText = "<b>" + primaryText + "</b>";
-            }
-        }
-
-        /**
-         * Generate Templates
-         */
-        
         if (currentCounter == 0){
             tmpTemplate = new CreateTemplateForDevice().instructionStartTemplate(title,imageURL,bgImageURL);
         }
@@ -287,9 +233,7 @@ public class InstructionGenerator {
 
         String OneMinuteWait = "<break time='10s'/>" + "<break time='10s'/>" + "<break time='10s'/>" + "<break time='10s'/>" + "<break time='10s'/>" + "<break time='10s'/>";
 
-        /**
-         * Return output and  Check if device support display interface
-         */
+
         if (null != handlerInput.getRequestEnvelope().getContext().getDisplay())
         {
             return  handlerInput.getResponseBuilder()
@@ -309,6 +253,5 @@ public class InstructionGenerator {
                     .withShouldEndSession(false)
                     .build();
         }
-
     }
 }
